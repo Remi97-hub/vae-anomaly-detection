@@ -184,6 +184,12 @@ This demonstrates a trade-off between representational capacity and regularizati
 ---
 
 
+### KL Weight Schedule Analysis
+A linear KL annealing schedule was used, gradually increasing the KL weight from 0 to 1 during the early training epochs.
+This strategy allowed the model to first focus on accurate reconstruction before enforcing latent space regularization.
+Empirically, KL annealing resulted in stable convergence and improved anomaly separation compared to using a fixed KL weight from the start.
+
+
 
 \## 8. Conclusion
 
