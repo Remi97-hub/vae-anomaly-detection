@@ -72,19 +72,32 @@ The test set contained both normal and anomalous samples with labels used strict
 
 
 
-\## 3. Model Architecture
+## 3. Model Architecture
 
-The VAE consists of:
+The Variational Autoencoder was implemented using a fully connected (MLP-based) architecture.
 
-\- An encoder that outputs mean (μ) and log-variance (log σ²)
+### Encoder
+The encoder consists of:
+- Input layer of size 30 (feature dimension)
+- Fully connected layer with 128 units and ReLU activation
+- Fully connected layer with 64 units and ReLU activation
+- Two parallel linear layers producing:
+  - Mean vector (μ)
+  - Log-variance vector (log σ²)
 
-\- A reparameterization step to enable backpropagation
+ReLU activation functions were chosen to introduce non-linearity while maintaining stable gradients during training.
 
-\- A decoder that reconstructs the input features
+### Latent Space
+The latent space dimensionality was treated as a tunable hyperparameter.
+Experiments were conducted with latent dimensions of 2, 4, 8, and 16 to analyze representational capacity and anomaly separation performance.
 
+### Decoder
+The decoder mirrors the encoder structure:
+- Fully connected layer with 64 units and ReLU activation
+- Fully connected layer with 128 units and ReLU activation
+- Output layer of size 30 to reconstruct the input features
 
-
-KL divergence regularizes the latent space to follow a standard normal distribution.
+No activation function was applied at the output layer, as the data is continuous and reconstruction error is computed using Mean Squared Error (MSE).
 
 
 
