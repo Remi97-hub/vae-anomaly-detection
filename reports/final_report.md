@@ -1,0 +1,184 @@
+\# Variational Autoencoder (VAE) Based Anomaly Detection
+
+\## Observations and Analysis Report
+
+
+
+---
+
+
+
+\## 1. Objective
+
+The objective of this project is to detect anomalies in high-dimensional data using a Variational Autoencoder (VAE).  
+
+The model is trained only on normal data and anomalies are identified based on deviations in reconstruction behavior.
+
+
+
+---
+
+
+
+\## 2. Dataset Design
+
+A synthetic dataset with 30 features was generated using a latent variable model.
+
+
+
+\- Low-dimensional latent variables were sampled from a standard normal distribution
+
+\- A linear transformation mapped latent variables to feature space
+
+\- Small Gaussian noise was added to simulate realistic measurements
+
+
+
+This process introduces natural correlations between features, closely matching real-world data behavior.
+
+
+
+\### Anomaly Injection
+
+Three structured anomaly types were introduced:
+
+
+
+1\. \*\*Mean Shift\*\*  
+
+&nbsp;  A subset of features was shifted by a constant value, simulating systematic drift.
+
+
+
+2\. \*\*Correlation Break\*\*  
+
+&nbsp;  One feature was decoupled from latent structure and replaced with independent random values.
+
+
+
+3\. \*\*Variance Explosion\*\*  
+
+&nbsp;  Large noise was injected into a specific feature, simulating instability or sensor faults.
+
+
+
+Only normal samples were used for training.  
+
+The test set contained both normal and anomalous samples with labels used strictly for evaluation.
+
+
+
+---
+
+
+
+\## 3. Model Architecture
+
+The VAE consists of:
+
+\- An encoder that outputs mean (μ) and log-variance (log σ²)
+
+\- A reparameterization step to enable backpropagation
+
+\- A decoder that reconstructs the input features
+
+
+
+KL divergence regularizes the latent space to follow a standard normal distribution.
+
+
+
+---
+
+
+
+\## 4. Training Strategy
+
+The model was trained using a combined loss:
+
+\- Mean Squared Error (reconstruction loss)
+
+\- KL divergence (regularization)
+
+
+
+KL annealing was applied to gradually increase the influence of KL divergence during training, improving stability and preventing posterior collapse.
+
+
+
+---
+
+
+
+\## 5. Anomaly Scoring Method
+
+Anomaly scores were computed using per-sample reconstruction error.
+
+
+
+Higher reconstruction error indicates greater deviation from learned normal patterns and a higher likelihood of being anomalous.
+
+
+
+A statistical threshold was defined using the mean and standard deviation of reconstruction errors.
+
+
+
+---
+
+
+
+\## 6. Evaluation Metrics
+
+Model performance was evaluated using:
+
+\- \*\*ROC-AUC\*\* to measure ranking quality across thresholds
+
+\- \*\*PR-AUC\*\* to account for class imbalance
+
+\- \*\*Precision\*\* and \*\*Recall\*\* at a fixed threshold
+
+
+
+A conservative threshold resulted in high precision with moderate recall, suitable for scenarios where false alarms are costly.
+
+
+
+---
+
+
+
+\## 7. Latent Dimension Experiments
+
+Experiments were conducted using multiple latent dimensions: 2, 4, 8, and 16.
+
+
+
+\### Observations:
+
+\- Smaller latent dimensions underfit the data and reduced anomaly separation
+
+\- Increasing latent dimension improved ROC-AUC and PR-AUC
+
+\- Performance gains diminished beyond a moderate latent size
+
+
+
+This demonstrates a trade-off between representational capacity and regularization.
+
+
+
+---
+
+
+
+\## 8. Conclusion
+
+The VAE successfully learned the distribution of normal data and detected multiple structured anomaly types.
+
+
+
+Results highlight the importance of principled dataset design, latent space capacity, and proper evaluation metrics for effective anomaly detection.
+
+
+
